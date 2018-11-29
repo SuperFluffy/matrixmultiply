@@ -223,7 +223,7 @@ unsafe fn kernel_x86_avx(k: usize, alpha: T, a: *const T, b: *const T,
         }
     });
 
-    let alphav = _mm256_set1_ps(alpha);
+    let alphav = _mm256_broadcast_ss(&alpha);
 
     // Permute to put the abij elements in order
     //
@@ -304,7 +304,7 @@ unsafe fn kernel_x86_avx(k: usize, alpha: T, a: *const T, b: *const T,
 
     // C ← α A B + β C
     let mut c = [_mm256_setzero_ps(); MR];
-    let betav = _mm256_set1_ps(beta);
+    let betav = _mm256_broadcast_ss(&beta);
     if beta != 0. {
         // Read C
         if csc == 1 {
